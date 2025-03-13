@@ -1,0 +1,44 @@
+# Environment variables
+.env
+
+# iOS & macOS
+apps/ios/build/
+apps/ios/xcuserdata/
+apps/ios/*.xcworkspace/xcuserdata/
+apps/ios/Pods/
+apps/ios/*.xcodeproj/xcuserdata/
+apps/macos/build/
+apps/macos/xcuserdata/
+apps/macos/*.xcworkspace/xcuserdata/
+apps/macos/Pods/
+apps/macos/*.xcodeproj/xcuserdata/
+.DS_Store
+
+# Android
+apps/android/build/
+apps/android/.gradle/
+apps/android/local.properties
+apps/android/.idea/
+apps/android/*.iml
+apps/android/captures/
+apps/android/.externalNativeBuild/
+apps/android/.cxx/
+
+# Web
+apps/web/node_modules/
+apps/web/dist/
+apps/web/.cache/
+apps/web/public/build/
+apps/web/.env.local
+apps/web/.env.development.local
+apps/web/.env.test.local
+apps/web/.env.production.local
+
+# X Bot (Python)
+apps/x-bot/__pycache__/
+apps/x-bot/*.py[cod]
+apps/x-bot/*$py.class
+apps/x-bot/.venv/
+apps/x-bot/venv/
+apps/x-bot/ENV/
+apps/x-bot/.Pythonnode_modules/

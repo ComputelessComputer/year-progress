@@ -1,0 +1,45 @@
+{
+  "navigation": {
+    "home": "홈",
+    "privacy": "개인정보 처리방침",
+    "terms": "이용약관"
+  },
+  "home": {
+    "title": "Year Progress App",
+    "description": "미니멀한 프로그레스바로 시간의 흐름을 직관적으로 확인하세요",
+    "currentProgress": "현재 진행률",
+    "daysLeft": "남은 일수"
+  },
+  "features": {
+    "simple": "심플하고 우아한 디자인",
+    "simpleDescription": "깔끔하고 미니멀한 인터페이스로 한눈에 필요한 정보를 확인할 수 있습니다.",
+    "multipleTimeScales": "다양한 시간 단위 제공",
+    "multipleTimeScalesDescription": "연도, 월, 하루의 진행률을 한곳에서 손쉽게 추적할 수 있습니다.",
+    "menuBarIntegration": "메뉴 막대에서 즉시 접근",
+    "menuBarIntegrationDescription": "macOS 메뉴 막대에서 언제든지 확인할 수 있으며, 단축키로 빠르게 실행할 수 있습니다.",
+    "nativeMacOSApp": "macOS 전용 네이티브 앱",
+    "nativeMacOSAppDescription": "macOS에 최적화된 디자인과 기능으로 쾌적한 사용자 경험을 제공합니다."
+  },
+  "background": {
+    "title": "개발 계기",
+    "description1": "약 5개월 전, ",
+    "natFriedmanLink": "Nat Friedman의 홈페이지",
+    "description2": "를 보다가 아주 단순하면서도 인상적인 문장을 발견했습니다: ",
+    "quote": "일주일은 1년의 2%다",
+    "description3": "시간이 소중하다는 건 누구나 알지만, 시계만 보고서는 그 흐름이 실감 나지 않을 때가 많습니다. 그 대신 상대적인 시간 개념을 활용하면 더 효과적으로 시간의 흐름을 인식할 수 있습니다.",
+    "description4": "Nat의 개념이 너무 마음에 들어 제 삶에도 적용해 보았고, 그 결과 이 앱을 만들게 되었습니다.",
+    "whyUseThis": {
+      "title": "왜 이 앱을 써야 할까요?",
+      "description": "\"비슷한 기능을 가진 다른 앱도 있지 않나\"라고 생각할 수도 있습니다. 하지만 기존 앱들을 조사해보니, 기능은 단순한데 가격은 과도하게 높은 경우가 많았습니다.",
+      "intro": "대부분의 사람들은 시계와 달력으로 시간을 추적하지만, 이것만으로는 시간이 얼마나 빠르게 흘러가는지 실감하기 어렵습니다. Year Progress는 시간을 더 직관적이고 동기부여가 되는 방식으로 시각화해 줍니다.",
+      "whyItMatters": "이 앱이 중요한 이유:",
+      "benefits": {
+        "seeTimeDifferently": "시간을 다르게 보기 – 일주일은 단순히 7일이 아니라 1년의 2%입니다. 이런 관점은 장기적인 계획을 세우는 데 도움이 됩니다.",
+        "stayMotivated": "동기부여 유지 – 연도, 월, 일의 진행 상황을 실시간으로 확인하면서 목표를 향해 나아갈 수 있습니다.",
+        "minimal": "미니멀하고 간편함 – 복잡한 설정 없이 메뉴 바에서 바로 시간의 흐름을 확인할 수 있습니다.",
+        "betterThanExisting": "기존 앱보다 나은 가치 – 많은 앱들이 단순한 기능에 높은 가격을 책정하지만, 이 앱은 합리적인 가격으로 효과적인 기능을 제공합니다."
+      },
+      "conclusion": "시간이 너무 빨리 지나간다고 느끼신다면, Year Progress가 시간을 더 의미 있게 활용하는 데 도움을 드릴 것입니다—하나의 진행 바로 말이죠."
+    }
+  }
+}
