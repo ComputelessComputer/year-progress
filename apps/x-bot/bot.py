@@ -27,7 +27,7 @@ def year_progress_bar():
 
     post = (
         f"Year Progress: [{bar}] {percent_passed:.2f}%\n"
-        f"▕{'░' * bar_length}▏ Day {days_passed} of {total_days}"
+        f"Day {days_passed} of {total_days}"
     )
     return post
 
