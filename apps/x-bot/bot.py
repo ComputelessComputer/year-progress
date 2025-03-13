@@ -32,15 +32,31 @@ def year_progress_bar():
     return post
 
 def tweet(message):
-    client = tweepy.Client(
-        consumer_key=os.getenv('API_KEY'),
-        consumer_secret=os.getenv('API_SECRET'),
-        access_token=os.getenv('ACCESS_TOKEN'),
-        access_token_secret=os.getenv('ACCESS_TOKEN_SECRET')
-    )
+    try:
+        print(f"Attempting to tweet with credentials:")
+        print(f"API_KEY: {os.getenv('API_KEY')[:5]}...")
+        print(f"API_SECRET: {os.getenv('API_SECRET')[:5]}...")
+        print(f"ACCESS_TOKEN: {os.getenv('ACCESS_TOKEN')[:5]}...")
+        print(f"ACCESS_TOKEN_SECRET: {os.getenv('ACCESS_TOKEN_SECRET')[:5]}...")
+        
+        client = tweepy.Client(
+            consumer_key=os.getenv('API_KEY'),
+            consumer_secret=os.getenv('API_SECRET'),
+            access_token=os.getenv('ACCESS_TOKEN'),
+            access_token_secret=os.getenv('ACCESS_TOKEN_SECRET')
+        )
 
-    client.create_tweet(text=message)
+        response = client.create_tweet(text=message)
+        print(f"Tweet posted successfully! Tweet ID: {response.data['id']}")
+        return response
+    except Exception as e:
+        print(f"Error posting tweet: {str(e)}")
+        print(f"Error type: {type(e).__name__}")
+        if hasattr(e, 'response') and hasattr(e.response, 'text'):
+            print(f"Response text: {e.response.text}")
+        raise
 
 if __name__ == "__main__":
     message = year_progress_bar()
+    print(f"Generated message: {message}")
     tweet(message)
