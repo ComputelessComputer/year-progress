@@ -2,8 +2,8 @@ name: X-Bot Daily Post
 
 on:
   schedule:
-    # Run at midnight UTC (00:00 GMT+0) every day
-    - cron: '0 0 * * *'
+    # Run at 9 AM UTC every day
+    - cron: '0 9 * * *'
   # Allow manual triggering for testing
   workflow_dispatch:
 
