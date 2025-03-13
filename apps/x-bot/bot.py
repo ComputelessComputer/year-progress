@@ -12,26 +12,32 @@ if env_path.exists():
     load_dotenv(dotenv_path=env_path)
 
 def year_progress_bar():
-    today = datetime.datetime.now(datetime.timezone.utc)
-    year_start = datetime.datetime(today.year, 1, 1, tzinfo=datetime.timezone.utc)
-    year_end = datetime.datetime(today.year + 1, 1, 1, tzinfo=datetime.timezone.utc)
-
-    days_passed = (today - year_start).days + 1
+    today = datetime.datetime.utcnow()
+    year_start = datetime.datetime(today.year, 1, 1)
+    year_end = datetime.datetime(today.year + 1, 1, 1)
+    
     total_days = (year_end - year_start).days
-    percent_passed = (today - year_start).total_seconds() / (year_end - year_start).total_seconds() * 100
-
+    days_passed = (today - year_start).days
+    
+    percent_passed = (days_passed / total_days) * 100
+    
     bar_length = 20
-    filled_length = int(bar_length * percent_passed // 100)
-
+    filled_length = int(bar_length * days_passed // total_days)
     bar = '█' * filled_length + '·' * (bar_length - filled_length)
 
-    post = (
-        f"Year Progress: [{bar}] {percent_passed:.2f}%\n"
-        f"Day {days_passed} of {total_days}"
+    main_tweet = (
+        f"{percent_passed:.2f}% of {today.year} has passed.\n"
+        f"[{bar}]"
     )
-    return post
+    
+    promo_tweet = (
+        f"Keep track of your time ⏳\n"
+        f"https://theyearprogress.app"
+    )
+    
+    return main_tweet, promo_tweet
 
-def tweet(message):
+def tweet(main_message, promo_message):
     try:
         print(f"Attempting to tweet with credentials:")
         print(f"API_KEY: {os.getenv('API_KEY')[:5]}...")
@@ -46,9 +52,18 @@ def tweet(message):
             access_token_secret=os.getenv('ACCESS_TOKEN_SECRET')
         )
 
-        response = client.create_tweet(text=message)
-        print(f"Tweet posted successfully! Tweet ID: {response.data['id']}")
-        return response
+        # Post the main tweet
+        main_response = client.create_tweet(text=main_message)
+        print(f"Main tweet posted successfully! Tweet ID: {main_response.data['id']}")
+        
+        # Post the promo reply as a thread
+        promo_response = client.create_tweet(
+            text=promo_message,
+            in_reply_to_tweet_id=main_response.data['id']
+        )
+        print(f"Promo tweet posted successfully! Tweet ID: {promo_response.data['id']}")
+        
+        return main_response, promo_response
     except Exception as e:
         print(f"Error posting tweet: {str(e)}")
         print(f"Error type: {type(e).__name__}")
@@ -57,6 +72,7 @@ def tweet(message):
         raise
 
 if __name__ == "__main__":
-    message = year_progress_bar()
-    print(f"Generated message: {message}")
-    tweet(message)
+    main_message, promo_message = year_progress_bar()
+    print(f"Generated main message: {main_message}")
+    print(f"Generated promo message: {promo_message}")
+    tweet(main_message, promo_message)
