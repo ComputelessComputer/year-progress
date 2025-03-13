@@ -5,9 +5,11 @@ from dotenv import load_dotenv
 import pathlib
 
 
+# Try to load from .env file for local development
 current_dir = pathlib.Path(__file__).parent.absolute()
 env_path = current_dir.parent.parent / '.env'
-load_dotenv(dotenv_path=env_path)
+if env_path.exists():
+    load_dotenv(dotenv_path=env_path)
 
 def year_progress_bar():
     today = datetime.datetime.now(datetime.timezone.utc)

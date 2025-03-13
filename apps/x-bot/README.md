@@ -105,28 +105,41 @@ python bot.py
 
 Verify the tweet posted correctly.
 
-## ⏰ Automate with Cron
+## ⏰ Automate with GitHub Actions
 
-Open your crontab:
+This bot is configured to run automatically using GitHub Actions. The workflow is set up to:
 
-```
-crontab -e
-```
+1. Run daily at midnight (00:00 GMT+0)
+2. Use repository secrets for API credentials
+3. Allow manual triggering for testing
 
-Add the cron job (adjust paths accordingly):
+### Setting Up GitHub Secrets
 
-```
-0 0 \* \* \* cd /path/to/year-progress-bot && /path/to/year-progress-bot/venv/bin/python bot.py
-```
+For the GitHub Action to work, you need to add your X API credentials as repository secrets:
+
+1. Go to your GitHub repository
+2. Navigate to Settings > Secrets and variables > Actions
+3. Add the following secrets:
+   - `API_KEY` - Your X API Key
+   - `API_SECRET` - Your X API Secret
+   - `ACCESS_TOKEN` - Your X Access Token
+   - `ACCESS_TOKEN_SECRET` - Your X Access Token Secret
+
+### Manual Triggering
+
+To manually trigger the workflow:
+
+1. Go to your GitHub repository
+2. Navigate to Actions > X-Bot Daily Post
+3. Click "Run workflow"
 
 ## 📌 Verify Automation
 
-Ensure the bot posts correctly at midnight (GMT+0). Check cron logs if troubleshooting is needed:
+After setting up the GitHub Action:
 
-```bash
-grep CRON /var/log/syslog
-```
+1. Check the Actions tab in your repository to see if the workflow runs successfully
+2. Verify that tweets are posted to your X account at the scheduled time
 
 ##🎉 Done!
 
-Your bot is live and will automatically post the year’s progress daily. Happy tweeting!
+Your bot is live and will automatically post the year's progress daily. Happy tweeting!
