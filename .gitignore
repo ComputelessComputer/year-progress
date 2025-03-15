@@ -36,10 +36,10 @@ apps/web/.env.test.local
 apps/web/.env.production.local
 
 # X Bot (Python)
-apps/x-bot/__pycache__/
-apps/x-bot/*.py[cod]
-apps/x-bot/*$py.class
-apps/x-bot/.venv/
-apps/x-bot/venv/
-apps/x-bot/ENV/
-apps/x-bot/.Pythonnode_modules/
+apps/bots/__pycache__/
+apps/bots/*.py[cod]
+apps/bots/*$py.class
+apps/bots/.venv/
+apps/bots/venv/
+apps/bots/ENV/
+apps/bots/.Pythonnode_modules/
