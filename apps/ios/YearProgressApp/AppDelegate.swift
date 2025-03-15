@@ -7,24 +7,25 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var currentMode: ProgressMode = .year
     private var updateTimer: Timer?
     private let launchAtLoginKey = "LaunchAtLogin"
-    private let customStartDateKey = "CustomStartDate"
     private let customEndDateKey = "CustomEndDate"
     private var yearMenuItem: NSMenuItem?
     private var monthMenuItem: NSMenuItem?
     private var dayMenuItem: NSMenuItem?
+    private var weekMenuItem: NSMenuItem?
+    private var workWeekMenuItem: NSMenuItem?
     private var customMenuItem: NSMenuItem?
     
-    
-    private var customStartDate: Date?
     private var customEndDate: Date?
 
     private enum ProgressMode: CaseIterable {
-        case year, month, day, custom
+        case year, month, week, workWeek, day, custom
         
         var title: String {
             switch self {
             case .year: return "of yyyy"
-            case .month: return "of MMM"
+            case .month: return "of MMMM"
+            case .week: return "of Week"
+            case .workWeek: return "of Work Week"
             case .day: return "of Today"
             case .custom: return "Custom"
             }
@@ -46,10 +47,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         NSApp.setActivationPolicy(.accessory)
         
-        
-        if let startDate = UserDefaults.standard.object(forKey: customStartDateKey) as? Date,
-           let endDate = UserDefaults.standard.object(forKey: customEndDateKey) as? Date {
-            customStartDate = startDate
+        if let endDate = UserDefaults.standard.object(forKey: customEndDateKey) as? Date {
             customEndDate = endDate
         }
         
@@ -78,13 +76,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         
         yearMenuItem = NSMenuItem(title: "Year Progress", action: #selector(selectYearMode), keyEquivalent: "")
         monthMenuItem = NSMenuItem(title: "Month Progress", action: #selector(selectMonthMode), keyEquivalent: "")
+        weekMenuItem = NSMenuItem(title: "Week Progress", action: #selector(selectWeekMode), keyEquivalent: "")
+        workWeekMenuItem = NSMenuItem(title: "Work Week Progress", action: #selector(selectWorkWeekMode), keyEquivalent: "")
         dayMenuItem = NSMenuItem(title: "Day Progress", action: #selector(selectDayMode), keyEquivalent: "")
         customMenuItem = NSMenuItem(title: "Custom Date Progress", action: #selector(selectCustomMode), keyEquivalent: "")
         
         if let yearItem = yearMenuItem, let monthItem = monthMenuItem, 
+           let weekItem = weekMenuItem, let workWeekItem = workWeekMenuItem,
            let dayItem = dayMenuItem, let customItem = customMenuItem {
             menu.addItem(yearItem)
             menu.addItem(monthItem)
+            menu.addItem(weekItem)
+            menu.addItem(workWeekItem)
             menu.addItem(dayItem)
             menu.addItem(customItem)
         }
@@ -92,7 +95,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(NSMenuItem.separator())
         
         
-        let configureCustomItem = NSMenuItem(title: "Configure Custom Dates...", action: #selector(configureCustomDates), keyEquivalent: "")
+        let configureCustomItem = NSMenuItem(title: "Configure Custom End Date...", action: #selector(configureCustomDates), keyEquivalent: "")
         menu.addItem(configureCustomItem)
         
         
@@ -121,6 +124,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         updateProgress()
     }
     
+    @objc private func selectWeekMode() {
+        currentMode = .week
+        updateMenuCheckmarks()
+        updateProgress()
+    }
+    
+    @objc private func selectWorkWeekMode() {
+        currentMode = .workWeek
+        updateMenuCheckmarks()
+        updateProgress()
+    }
+    
     @objc private func selectDayMode() {
         currentMode = .day
         updateMenuCheckmarks()
@@ -128,88 +143,58 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @objc private func selectCustomMode() {
-        
-        if let _ = customStartDate, let _ = customEndDate {
+        if let _ = customEndDate {
             currentMode = .custom
             updateMenuCheckmarks()
             updateProgress()
         } else {
-            
             configureCustomDates()
         }
     }
     
     @objc private func configureCustomDates() {
-        
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 400, height: 200),
+            contentRect: NSRect(x: 0, y: 0, width: 400, height: 150),
             styleMask: [.titled, .closable],
             backing: .buffered,
             defer: false
         )
-        window.title = "Configure Custom Dates"
+        window.title = "Configure Custom End Date"
         window.center()
         
-        
-        let contentView = NSView(frame: NSRect(x: 0, y: 0, width: 400, height: 200))
-        
-        
-        let startLabel = NSTextField(labelWithString: "Start Date:")
-        startLabel.frame = NSRect(x: 20, y: 160, width: 100, height: 20)
-        contentView.addSubview(startLabel)
-        
-        
-        let startDatePicker = NSDatePicker()
-        startDatePicker.datePickerStyle = .textField
-        startDatePicker.datePickerMode = .single
-        startDatePicker.frame = NSRect(x: 130, y: 160, width: 200, height: 20)
-        if let startDate = customStartDate {
-            startDatePicker.dateValue = startDate
-        } else {
-            startDatePicker.dateValue = Date()
-        }
-        contentView.addSubview(startDatePicker)
-        
+        let contentView = NSView(frame: NSRect(x: 0, y: 0, width: 400, height: 150))
         
         let endLabel = NSTextField(labelWithString: "End Date:")
-        endLabel.frame = NSRect(x: 20, y: 120, width: 100, height: 20)
+        endLabel.frame = NSRect(x: 20, y: 100, width: 100, height: 20)
         contentView.addSubview(endLabel)
-        
         
         let endDatePicker = NSDatePicker()
         endDatePicker.datePickerStyle = .textField
         endDatePicker.datePickerMode = .single
-        endDatePicker.frame = NSRect(x: 130, y: 120, width: 200, height: 20)
+        endDatePicker.frame = NSRect(x: 130, y: 100, width: 200, height: 20)
         if let endDate = customEndDate {
             endDatePicker.dateValue = endDate
         } else {
-            
             endDatePicker.dateValue = Calendar.current.date(byAdding: .year, value: 1, to: Date()) ?? Date()
         }
         contentView.addSubview(endDatePicker)
         
-        
-        let descLabel = NSTextField(wrappingLabelWithString: "Set start and end dates to track progress between them.")
-        descLabel.frame = NSRect(x: 20, y: 80, width: 360, height: 30)
+        let descLabel = NSTextField(wrappingLabelWithString: "Set an end date to track progress from today to that date.")
+        descLabel.frame = NSRect(x: 20, y: 60, width: 360, height: 30)
         contentView.addSubview(descLabel)
-        
         
         let saveButton = NSButton(title: "Save", target: nil, action: nil)
         saveButton.frame = NSRect(x: 280, y: 20, width: 100, height: 32)
         saveButton.bezelStyle = .rounded
         saveButton.keyEquivalent = "\r" 
         
-        
         saveButton.target = self
         saveButton.action = #selector(saveCustomDates(_:))
         
-        
-        objc_setAssociatedObject(saveButton, UnsafeRawPointer(bitPattern: 1)!, startDatePicker, .OBJC_ASSOCIATION_RETAIN)
         objc_setAssociatedObject(saveButton, UnsafeRawPointer(bitPattern: 2)!, endDatePicker, .OBJC_ASSOCIATION_RETAIN)
         objc_setAssociatedObject(saveButton, UnsafeRawPointer(bitPattern: 3)!, window, .OBJC_ASSOCIATION_RETAIN)
         
         contentView.addSubview(saveButton)
-        
         
         let cancelButton = NSButton(title: "Cancel", target: nil, action: nil)
         cancelButton.frame = NSRect(x: 170, y: 20, width: 100, height: 32)
@@ -225,40 +210,30 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @objc private func saveCustomDates(_ sender: NSButton) {
-        
-        guard let startDatePicker = objc_getAssociatedObject(sender, UnsafeRawPointer(bitPattern: 1)!) as? NSDatePicker,
-              let endDatePicker = objc_getAssociatedObject(sender, UnsafeRawPointer(bitPattern: 2)!) as? NSDatePicker,
+        guard let endDatePicker = objc_getAssociatedObject(sender, UnsafeRawPointer(bitPattern: 2)!) as? NSDatePicker,
               let window = objc_getAssociatedObject(sender, UnsafeRawPointer(bitPattern: 3)!) as? NSWindow else {
             return
         }
         
-        let startDate = startDatePicker.dateValue
         let endDate = endDatePicker.dateValue
         
-        
-        if startDate >= endDate {
+        if Date() >= endDate {
             let alert = NSAlert()
-            alert.messageText = "Invalid Date Range"
-            alert.informativeText = "The start date must be before the end date."
+            alert.messageText = "Invalid Date"
+            alert.informativeText = "The end date must be in the future."
             alert.alertStyle = .warning
             alert.addButton(withTitle: "OK")
             alert.beginSheetModal(for: window, completionHandler: nil)
             return
         }
         
-        
-        customStartDate = startDate
         customEndDate = endDate
         
-        
-        UserDefaults.standard.set(startDate, forKey: customStartDateKey)
         UserDefaults.standard.set(endDate, forKey: customEndDateKey)
-        
         
         currentMode = .custom
         updateMenuCheckmarks()
         updateProgress()
-        
         
         window.close()
     }
@@ -270,14 +245,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     private func startTimer() {
-        
         updateTimer?.invalidate()
-        
         
         updateTimer = Timer.scheduledTimer(withTimeInterval: 60.0, repeats: true) { [weak self] _ in
             self?.updateProgress()
         }
-        
         
         RunLoop.current.add(updateTimer!, forMode: .common)
     }
@@ -318,8 +290,44 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             progress = Double(calendar.dateComponents([.second], from: startOfMonth, to: now).second!) /
                       Double(calendar.dateComponents([.second], from: startOfMonth, to: endOfMonth).second!) * 100
             
-            dateFormatter.dateFormat = "MMM"
+            dateFormatter.dateFormat = "MMMM"
             displayText = "of \(dateFormatter.string(from: now))"
+            
+        case .week:
+            let weekday = calendar.component(.weekday, from: now)
+            let daysToSubtract = weekday - calendar.firstWeekday
+            let startOfWeek = calendar.date(byAdding: .day, value: -daysToSubtract, to: calendar.startOfDay(for: now))!
+            let endOfWeek = calendar.date(byAdding: .day, value: 7, to: startOfWeek)!
+            
+            progress = Double(calendar.dateComponents([.second], from: startOfWeek, to: now).second!) /
+                      Double(calendar.dateComponents([.second], from: startOfWeek, to: endOfWeek).second!) * 100
+            
+            let weekOfYear = calendar.component(.weekOfYear, from: now)
+            displayText = "Week \(weekOfYear)"
+            
+        case .workWeek:
+            let weekday = calendar.component(.weekday, from: now)
+            
+            
+            if weekday == 1 || weekday == 7 {  
+                progress = 100.0
+                displayText = "Weekend!"
+            } else {
+                
+                var daysToSubtract = weekday - 2  
+                if daysToSubtract < 0 {
+                    daysToSubtract += 7
+                }
+                
+                let startOfWorkWeek = calendar.date(byAdding: .day, value: -daysToSubtract, to: calendar.startOfDay(for: now))!
+                let endOfWorkWeek = calendar.date(byAdding: .day, value: 5, to: startOfWorkWeek)!
+                
+                progress = Double(calendar.dateComponents([.second], from: startOfWorkWeek, to: now).second!) /
+                          Double(calendar.dateComponents([.second], from: startOfWorkWeek, to: endOfWorkWeek).second!) * 100
+                
+                let weekOfYear = calendar.component(.weekOfYear, from: now)
+                displayText = "Week \(weekOfYear)"
+            }
             
         case .day:
             let startOfDay = calendar.date(from: calendar.dateComponents([.year, .month, .day], from: now))!
@@ -330,23 +338,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             displayText = "of Today"
             
         case .custom:
-            if let start = customStartDate, let end = customEndDate {
+            if let end = customEndDate {
+                let start = Date()
                 
-                let totalDuration = calendar.dateComponents([.second], from: start, to: end).second!
-                let elapsedDuration = calendar.dateComponents([.second], from: start, to: now).second!
-                
-                
-                if now < start {
-                    progress = 0
-                } else if now > end {
+                if start > end {
                     progress = 100
                 } else {
-                    progress = Double(elapsedDuration) / Double(totalDuration) * 100
+                    progress = 0  
                 }
                 
-                
                 dateFormatter.dateFormat = "MMM d, yyyy"
-                displayText = "\(dateFormatter.string(from: start)) - \(dateFormatter.string(from: end))"
+                displayText = "until \(dateFormatter.string(from: end))"
             } else {
                 progress = 0
                 displayText = "Custom (not set)"
@@ -354,12 +356,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         if let button = statusItem.button {
-            
             let roundedProgress = Int(round(progress / 5.0) * 5)
             let imageName = String(format: "gauge%02d", roundedProgress)
             
             if let originalImage = NSImage(named: imageName) {
-                
                 let resizedImage = NSImage(size: NSSize(width: 18, height: 18))
                 resizedImage.lockFocus()
                 originalImage.size = NSSize(width: 18, height: 18)
@@ -378,6 +378,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func updateMenuCheckmarks() {
         yearMenuItem?.state = currentMode == .year ? .on : .off
         monthMenuItem?.state = currentMode == .month ? .on : .off
+        weekMenuItem?.state = currentMode == .week ? .on : .off
+        workWeekMenuItem?.state = currentMode == .workWeek ? .on : .off
         dayMenuItem?.state = currentMode == .day ? .on : .off
         customMenuItem?.state = currentMode == .custom ? .on : .off
     }
@@ -399,7 +401,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationWillTerminate(_ notification: Notification) {
-        
         updateTimer?.invalidate()
     }
 }
