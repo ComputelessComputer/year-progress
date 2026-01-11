@@ -1,0 +1,25 @@
+---
+interface Props {
+  href?: string;
+  class?: string;
+}
+
+const { href, class: className = '' } = Astro.props;
+---
+
+<a
+  href={href}
+  target="_blank"
+  class:list={[
+    'relative rounded-xl border-none p-0 cursor-pointer outline-offset-4 block',
+    className,
+  ]}
+  style="background: hsl(220, 100%, 32%);"
+>
+  <span
+    class="block px-[42px] py-3 rounded-xl text-xl text-white translate-y-[-6px] hover:translate-y-[-4px] active:translate-y-[-2px] transition-transform duration-50"
+    style="background: hsl(210, 100%, 47%);"
+  >
+    <slot />
+  </span>
+</a>

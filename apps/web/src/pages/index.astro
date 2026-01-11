@@ -1,0 +1,114 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PushableButton from '../components/PushableButton.astro';
+---
+
+<Layout title="Year Progress App">
+  <main class="max-w-4xl mx-auto px-4 py-16">
+    <div class="text-center">
+      <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+        Year Progress App
+      </h1>
+
+      <p class="mt-6 text-lg leading-8 text-gray-600">
+        Track the passage of time with elegant progress bars right from your menu bar
+      </p>
+
+      <img
+        src="/assets/en.jpg"
+        alt="Year Progress App Screenshot"
+        width="800"
+        height="500"
+        class="mx-auto mt-10 rounded-xl shadow-2xl w-full max-w-[800px] h-auto"
+      />
+
+      <div class="mt-8 flex justify-center">
+        <PushableButton href="https://apps.apple.com/app/year-progress-tracker/id6741092986">
+          Download for macOS
+        </PushableButton>
+      </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="mx-auto mt-32 max-w-2xl">
+      <div class="grid grid-cols-1 gap-12 sm:grid-cols-2">
+        <div class="relative">
+          <dt class="text-lg font-semibold leading-7 text-gray-900">
+            Simple & Elegant
+          </dt>
+          <dd class="mt-2 text-base text-gray-600">
+            Clean, minimalist interface that shows you exactly what you need to know at a glance.
+          </dd>
+        </div>
+        <div class="relative">
+          <dt class="text-lg font-semibold leading-7 text-gray-900">
+            Multiple Time Scales
+          </dt>
+          <dd class="mt-2 text-base text-gray-600">
+            Track progress for the year, month, and day all in one place.
+          </dd>
+        </div>
+        <div class="relative">
+          <dt class="text-lg font-semibold leading-7 text-gray-900">
+            Menu Bar Integration
+          </dt>
+          <dd class="mt-2 text-base text-gray-600">
+            Always accessible from your menu bar, with keyboard shortcuts for quick access.
+          </dd>
+        </div>
+        <div class="relative">
+          <dt class="text-lg font-semibold leading-7 text-gray-900">
+            Native macOS App
+          </dt>
+          <dd class="mt-2 text-base text-gray-600">
+            Built specifically for macOS, following platform design guidelines and best practices.
+          </dd>
+        </div>
+      </div>
+    </div>
+
+    <!-- Background Section -->
+    <div class="mx-auto max-w-2xl mt-24">
+      <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl text-center">
+        Background
+      </h2>
+      <div class="mt-10 space-y-8 text-base leading-7 text-gray-600">
+        <p>
+          I was looking into
+          <a href="https://nat.org" target="_blank" class="text-blue-600 hover:text-blue-500">
+            Nat Friedman's homepage
+          </a>
+          about 5 months ago and read a really obvious yet astonishing statement:
+          <span class="font-semibold text-gray-900">A week is 2% of the year</span>.
+        </p>
+        <p>
+          Everyone knows that time is precious. But it's really not that tangible when you're stuck in the absolute scale of a clock. Instead, using relative scales is far more effective for humans, at least that is what I propose.
+        </p>
+        <p>
+          I really fell in love with Nat's concept of "a week is 2% of the year" and have been adopting this to measure my life.
+        </p>
+      </div>
+
+      <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl text-center mt-12 mb-10">
+        Why use this?
+      </h2>
+      <div class="space-y-8 text-base leading-7 text-gray-600">
+        <p>
+          Most people track time with clocks and calendars, but those don't really show how time is slipping away. Year Progress helps you visualize time in a way that makes it more tangible and motivating.
+        </p>
+
+        <p>Here's why it matters:</p>
+        <ul class="list-disc pl-5 space-y-2">
+          <li>See Time Differently – A week isn't just 7 days; it's 2% of your year. This perspective makes long-term planning easier.</li>
+          <li>Stay Motivated – Watching your year, month, or day fill up in real-time can keep you on track with goals.</li>
+          <li>Minimal & Effortless – No complex settings. Just open your menu bar and see where you are in the timeline.</li>
+          <li>Better Than Existing Apps – Many apps charge high fees for simple progress tracking. This app keeps it affordable and effective.</li>
+        </ul>
+
+        <p>
+          If you've ever felt like time slips away too fast, Year Progress will help you make sense of it—one progress bar at a time.
+        </p>
+      </div>
+    </div>
+  </main>
+</Layout>
