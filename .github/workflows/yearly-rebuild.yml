@@ -1,0 +1,25 @@
+name: Yearly Rebuild
+
+on:
+  schedule:
+    # Run at 00:05 UTC on January 1st
+    - cron: '5 0 1 1 *'
+  workflow_dispatch:
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+        working-directory: apps/web
+
+      - name: Build
+        run: bun run build
+        working-directory: apps/web
